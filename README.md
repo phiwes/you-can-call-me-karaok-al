@@ -11,3 +11,4 @@ Karaoke Queueing App
 7. queue addition interface
 8. queue removal (song was sung, vs removed and not sung)
 9. weighting system
+10. some sort of admin system for managing singers, manual weight adjustments
