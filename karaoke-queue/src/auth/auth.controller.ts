@@ -1,16 +1,30 @@
-import {Controller, Request, Post, UseGuards, Get} from '@nestjs/common';
+import {Controller, Request, Post, UseGuards, Get, Body} from '@nestjs/common';
+import {AuthGuard} from '@nestjs/passport';
+import {AuthService} from './auth.service';
+import {UsersService} from './user.service';
+import {User} from './user.entity';
 
 
-@Controller('auth')
+@Controller()
 export class AuthController {
 
-    @Post()
+    constructor(private readonly authService: AuthService,
+                private readonly userService: UsersService) {}
+
+    @UseGuards(AuthGuard('local'))
+    @Post('auth/login')
     async login(@Request() req) {
+        return this.authService.login(req.user);
+    }
+
+    @UseGuards(AuthGuard('jwt'))
+    @Get('profile')
+    getProfile(@Request() req) {
         return req.user;
     }
 
-    @Get()
-    getHello(): string {
-        return "the other controller works and so does this one you dummy";
+    @Post('register')
+    async create(@Body('user') userData: User) {
+        return this.userService.create(userData);
     }
 }
